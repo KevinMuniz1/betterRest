@@ -11,37 +11,51 @@ import SwiftUI
 
 
 struct ContentView: View {
-    @State private var wakeup = Date.now
+    @State private var wakeup = defaultWakeTime
     @State private var sleepAmount: Double = 8.0
     @State private var cupsOfCoffeeHad = 0
     
     @State private var alertTitle = ""
     @State private var messageTitle = ""
     @State private var showAlert = false
+    
+    static private var defaultWakeTime: Date {
+        var components = DateComponents()
+        components.hour = 7
+        components.minute = 0
+        
+        return Calendar.current.date(from: components) ?? .now
+    }
     var body: some View {
         NavigationStack {
-            VStack() {
-                Text("When do you want to wake up?")
-                    .font(.headline)
-                DatePicker("Please select a time", selection: $wakeup, displayedComponents: .hourAndMinute)
-                    .labelsHidden()
-                Text("Desired amount of sleep")
-                    .font(.headline)
-                Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
-                Text("Coffee amount:")
-                    .font(.headline)
-                Stepper("\(cupsOfCoffeeHad.formatted()) cup(s) of coffee", value: $cupsOfCoffeeHad, in: 0...20)
+            Form {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("When do you want to wake up?")
+                        .font(.headline)
+                    DatePicker("Please select a time", selection: $wakeup, displayedComponents: .hourAndMinute)
+                        .labelsHidden()
+                }
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("Desired amount of sleep")
+                        .font(.headline)
+                    Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
+                }
+                VStack(alignment: .leading, spacing: 10){
+                    Text("Coffee amount:")
+                        .font(.headline)
+                    Stepper("^[\(cupsOfCoffeeHad) cup](inflect: true) of coffee",value: $cupsOfCoffeeHad ,in: 0...20)
+                }
             }
             .toolbar {
                 Button("Calculate", action: calculateSleep)
             }
             .navigationTitle("BetterRest")
-        }.alert(alertTitle, isPresented: $showAlert) {
+        }
+        .alert(alertTitle, isPresented: $showAlert) {
             Button("Ok"){}
         }message: {
             Text(messageTitle)
         }
-        .padding()
     }
     func calculateSleep() {
         do {
