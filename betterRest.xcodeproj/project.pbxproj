@@ -11,6 +11,7 @@
 		548C715E2B4F0AF1006BF4E4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548C715D2B4F0AF1006BF4E4 /* ContentView.swift */; };
 		548C71602B4F0AF3006BF4E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 548C715F2B4F0AF3006BF4E4 /* Assets.xcassets */; };
 		548C71632B4F0AF3006BF4E4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 548C71622B4F0AF3006BF4E4 /* Preview Assets.xcassets */; };
+		548C716A2B50C9C4006BF4E4 /* SleepCalculator.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 548C71692B50C9C4006BF4E4 /* SleepCalculator.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		548C715D2B4F0AF1006BF4E4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		548C715F2B4F0AF3006BF4E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		548C71622B4F0AF3006BF4E4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		548C71692B50C9C4006BF4E4 /* SleepCalculator.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = SleepCalculator.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 			children = (
 				548C715B2B4F0AF1006BF4E4 /* betterRestApp.swift */,
 				548C715D2B4F0AF1006BF4E4 /* ContentView.swift */,
+				548C71692B50C9C4006BF4E4 /* SleepCalculator.mlmodel */,
 				548C715F2B4F0AF3006BF4E4 /* Assets.xcassets */,
 				548C71612B4F0AF3006BF4E4 /* Preview Content */,
 			);
@@ -139,6 +142,7 @@
 			files = (
 				548C715E2B4F0AF1006BF4E4 /* ContentView.swift in Sources */,
 				548C715C2B4F0AF1006BF4E4 /* betterRestApp.swift in Sources */,
+				548C716A2B50C9C4006BF4E4 /* SleepCalculator.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
