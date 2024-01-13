@@ -52,9 +52,6 @@ struct ContentView: View {
                         .font(.title)
                 }
             }
-            .toolbar {
-//                Button("Calculate", action: calculateSleep)
-            }
             .navigationTitle("BetterRest")
         }
     }
