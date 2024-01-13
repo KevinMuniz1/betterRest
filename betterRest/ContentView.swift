@@ -14,10 +14,8 @@ struct ContentView: View {
     @State private var wakeup = defaultWakeTime
     @State private var sleepAmount: Double = 8.0
     @State private var cupsOfCoffeeHad = 0
-    
     @State private var alertTitle = ""
     @State private var messageTitle = ""
-    @State private var showAlert = false
     
     static private var defaultWakeTime: Date {
         var components = DateComponents()
@@ -29,35 +27,38 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             Form {
-                VStack(alignment: .leading, spacing: 10) {
+                Section {
                     Text("When do you want to wake up?")
                         .font(.headline)
                     DatePicker("Please select a time", selection: $wakeup, displayedComponents: .hourAndMinute)
                         .labelsHidden()
                 }
-                VStack(alignment: .leading, spacing: 5) {
+                Section {
                     Text("Desired amount of sleep")
                         .font(.headline)
                     Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
                 }
-                VStack(alignment: .leading, spacing: 10){
+                Section{
                     Text("Coffee amount:")
                         .font(.headline)
-                    Stepper("^[\(cupsOfCoffeeHad) cup](inflect: true) of coffee",value: $cupsOfCoffeeHad ,in: 0...20)
+                    Picker("^[\(cupsOfCoffeeHad) cup](inflect: true)", selection: $cupsOfCoffeeHad){
+                        ForEach(0..<21){ number in
+                            Text("\(number)")
+                        }
+                    }.pickerStyle(.automatic)
+                }
+                Section {
+                    Text("Your suggested sleeptime is: \(calculateSleep().formatted(date: .omitted, time: .shortened))")
+                        .font(.title)
                 }
             }
             .toolbar {
-                Button("Calculate", action: calculateSleep)
+//                Button("Calculate", action: calculateSleep)
             }
             .navigationTitle("BetterRest")
         }
-        .alert(alertTitle, isPresented: $showAlert) {
-            Button("Ok"){}
-        }message: {
-            Text(messageTitle)
-        }
     }
-    func calculateSleep() {
+    func calculateSleep() -> Date {
         do {
             let config = MLModelConfiguration()
             
@@ -73,15 +74,15 @@ struct ContentView: View {
             
             let sleepTime = wakeup - prediction.actualSleep
             
-            alertTitle = "Your ideal bedtime is..."
-            messageTitle = "\(sleepTime.formatted(date: .omitted, time: .shortened))"
+            return sleepTime
+            
         } catch {
             alertTitle = "Oops"
             messageTitle = "Sorry, there has been a problem calculating your sleep."
         }
-        
-        showAlert = true
+        return wakeup
     }
+    
 }
 
 #Preview {
