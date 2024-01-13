@@ -14,9 +14,6 @@ struct ContentView: View {
     @State private var wakeup = defaultWakeTime
     @State private var sleepAmount: Double = 8.0
     @State private var cupsOfCoffeeHad = 0
-    @State private var alertTitle = ""
-    @State private var messageTitle = ""
-    
     static private var defaultWakeTime: Date {
         var components = DateComponents()
         components.hour = 7
@@ -24,38 +21,8 @@ struct ContentView: View {
         
         return Calendar.current.date(from: components) ?? .now
     }
-    var body: some View {
-        NavigationStack {
-            Form {
-                Section {
-                    Text("When do you want to wake up?")
-                        .font(.headline)
-                    DatePicker("Please select a time", selection: $wakeup, displayedComponents: .hourAndMinute)
-                        .labelsHidden()
-                }
-                Section {
-                    Text("Desired amount of sleep")
-                        .font(.headline)
-                    Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
-                }
-                Section{
-                    Text("Coffee amount:")
-                        .font(.headline)
-                    Picker("^[\(cupsOfCoffeeHad) cup](inflect: true)", selection: $cupsOfCoffeeHad){
-                        ForEach(0..<21){ number in
-                            Text("\(number)")
-                        }
-                    }.pickerStyle(.automatic)
-                }
-                Section {
-                    Text("Your suggested sleeptime is: \(calculateSleep().formatted(date: .omitted, time: .shortened))")
-                        .font(.title)
-                }
-            }
-            .navigationTitle("BetterRest")
-        }
-    }
-    func calculateSleep() -> Date {
+    
+    private var sleepResults: String {
         do {
             let config = MLModelConfiguration()
             
@@ -71,13 +38,47 @@ struct ContentView: View {
             
             let sleepTime = wakeup - prediction.actualSleep
             
-            return sleepTime
+            return "Your suggested bedtime is \(sleepTime.formatted(date: .omitted, time: .shortened))"
             
         } catch {
-            alertTitle = "Oops"
-            messageTitle = "Sorry, there has been a problem calculating your sleep."
+            return "Sorry, there has been a problem calculating your sleep."
         }
-        return wakeup
+    }
+    
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    DatePicker("Please select a time", selection: $wakeup, displayedComponents: .hourAndMinute)
+                        .labelsHidden()
+                } header: {
+                    Text("When do you want to wake up?")
+                        .font(.headline)
+                }
+                Section {
+                    Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
+                } header: {
+                    Text("Desired amount of sleep")
+                        .font(.headline)
+                }
+                Section{
+                    Picker("^[\(cupsOfCoffeeHad) cup](inflect: true)", selection: $cupsOfCoffeeHad){
+                        ForEach(0..<21){ number in
+                            Text("\(number)")
+                        }
+                    }.pickerStyle(.automatic)
+                } header: {
+                    Text("Coffee amount:")
+                        .font(.headline)
+                }
+                Section {
+                    Text(sleepResults)
+                        .font(.title)
+                }
+            }
+            .navigationTitle("BetterRest")
+        }
     }
     
 }
